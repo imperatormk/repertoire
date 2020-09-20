@@ -11,6 +11,12 @@ router.use('/auth', authRoutes)
 const adminRoutes = require('./admin')
 router.use('/admin', authMiddleware(), adminMiddleware, adminRoutes)
 
+const songsRoutes = require('./songs')
+router.use('/songs', authMiddleware(), songsRoutes)
+
+const requestsRoutes = require('./requests')
+router.use('/requests', authMiddleware(), requestsRoutes)
+
 const convertToNumbers = (req, res, next) => {
   const params = req.params
   Object.keys(params).forEach((paramKey) => {
@@ -22,4 +28,4 @@ const convertToNumbers = (req, res, next) => {
 }
 router.use(convertToNumbers) // doesn't work atm
 
-module.exports = router
+module.exports = router 

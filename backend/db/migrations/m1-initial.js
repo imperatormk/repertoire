@@ -71,31 +71,161 @@ const tokens = (Sequelize) => ({
   }
 })
 
-const addUnique = (queryInterface, tableName, fields) => {
-  return queryInterface.addIndex(tableName, fields, {
-    name: tableName + 'Unique',
-    unique: true
-  })
-}
+const songs = (Sequelize) => ({
+  id: {
+    allowNull: false,
+    autoIncrement: true,
+    primaryKey: true,
+    type: Sequelize.BIGINT
+  },
+  title: {
+    type: Sequelize.STRING,
+    allowNull: false
+  },
+  artist: {
+    type: Sequelize.STRING,
+    allowNull: false
+  },
+  attachments: {
+    type: Sequelize.JSONB,
+    allowNull: false
+  },
+  createdAt: {
+    type: Sequelize.DATE,
+    defaultValue: Sequelize.NOW
+  },
+  updatedAt: {
+    type: Sequelize.DATE,
+    defaultValue: Sequelize.NOW
+  }
+})
+
+const requests = (Sequelize) => ({
+  id: {
+    allowNull: false,
+    autoIncrement: true,
+    primaryKey: true,
+    type: Sequelize.BIGINT
+  },
+  user_id: {
+    type: Sequelize.BIGINT,
+    onDelete: 'CASCADE',
+    references: {
+      model: 'users',
+      key: 'id',
+      as: 'user_id'
+    },
+    allowNull: false
+  },
+  song_id: {
+    type: Sequelize.BIGINT,
+    onDelete: 'CASCADE',
+    references: {
+      model: 'songs',
+      key: 'id',
+      as: 'song_id'
+    },
+    allowNull: false
+  },
+  message: {
+    type: Sequelize.STRING,
+    allowNull: false
+  },
+  reviewed: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: false
+  },
+  createdAt: {
+    type: Sequelize.DATE,
+    defaultValue: Sequelize.NOW
+  },
+  updatedAt: {
+    type: Sequelize.DATE,
+    defaultValue: Sequelize.NOW
+  }
+})
+
+const suggestions = (Sequelize) => ({
+  id: {
+    allowNull: false,
+    autoIncrement: true,
+    primaryKey: true,
+    type: Sequelize.BIGINT
+  },
+  user_id: {
+    type: Sequelize.BIGINT,
+    onDelete: 'CASCADE',
+    references: {
+      model: 'users',
+      key: 'id',
+      as: 'user_id'
+    },
+    allowNull: false
+  },
+  song_id: {
+    type: Sequelize.BIGINT,
+    onDelete: 'CASCADE',
+    references: {
+      model: 'songs',
+      key: 'id',
+      as: 'song_id'
+    },
+    allowNull: false
+  },
+  title: {
+    type: Sequelize.STRING,
+    allowNull: false
+  },
+  artist: {
+    type: Sequelize.STRING,
+    allowNull: false
+  },
+  message: {
+    type: Sequelize.STRING,
+    allowNull: false
+  },
+  attachments: {
+    type: Sequelize.JSONB,
+    allowNull: false
+  },
+  reviewed: {
+    type: Sequelize.BOOLEAN,
+    defaultValue: false
+  },
+  createdAt: {
+    type: Sequelize.DATE,
+    defaultValue: Sequelize.NOW
+  },
+  updatedAt: {
+    type: Sequelize.DATE,
+    defaultValue: Sequelize.NOW
+  }
+})
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.sequelize.transaction((t) => {
       const usersP = queryInterface.createTable('users', users(Sequelize))
-      return Promise.all([usersP])
+      const songsP = queryInterface.createTable('songs', songs(Sequelize))
+      return Promise.all([usersP, songsP])
         .then(() => {
           const tokensP = queryInterface.createTable('tokens', tokens(Sequelize))
-          return Promise.all([tokensP])
+          const requestsP = queryInterface.createTable('requests', requests(Sequelize))
+          const suggestionsP = queryInterface.createTable('suggestions', suggestions(Sequelize))
+          return Promise.all([tokensP, requestsP, suggestionsP])
         })
     })
   },
   down: (queryInterface) => {
     return queryInterface.sequelize.transaction((t) => {
       const tokensP = queryInterface.dropTable('tokens')
-      return Promise.all([tokensP])
+      const requestsP = queryInterface.dropTable('requests')
+      const suggestionsP = queryInterface.dropTable('suggestions')
+      return Promise.all([tokensP, requestsP, suggestionsP])
         .then(() => {
           const usersP = queryInterface.dropTable('users')
-          return Promise.all([usersP])
+          const songsP = queryInterface.dropTable('songs')
+          return Promise.all([usersP, songsP])
         })
     })
   }

@@ -13,5 +13,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE
     }
   })
+  User.associate = function(models) {
+    User.hasMany(models.request, {
+      foreignKey: 'user_id',
+      as: 'requests'
+    })
+  }
   return User
 }
