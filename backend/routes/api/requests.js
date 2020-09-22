@@ -7,8 +7,15 @@ router.post('/', async (req, res, next) => {
   request.user_id = userId
 
   try {
+    const songId = request.song_id
+    const song = db.songs.getById(song)
+    if (!song) throw { status: 400, msg: 'invalidSong' }
+
+    const gig = db.gigs.getActive()
+    if (!gig || !gig.active || gig.id !== song.gig_id) throw { status: 400, msg: 'invalidGig' }
+
     const dbCtrl = db[type]
-    if (!dbCtrl) throw { msg: 'invalidOp' }
+    if (!dbCtrl) throw { status: 400, msg: 'invalidOp' }
 
     const requestRes = await dbCtrl.insert(request)
     requestRes.type = type

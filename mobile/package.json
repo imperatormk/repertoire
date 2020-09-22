@@ -13,6 +13,8 @@
   "repository": "<fill-your-repository-here>",
   "dependencies": {
     "@nativescript/theme": "~2.3.0",
+    "axios": "0.20.0",
+    "nativescript-socketio": "3.3.1",
     "nativescript-vue": "~2.4.0",
     "tns-core-modules": "~6.5.0"
   },

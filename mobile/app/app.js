@@ -1,7 +1,7 @@
-import Vue from "nativescript-vue";
+import Vue from 'nativescript-vue'
 
-import Home from "./components/Home";
+import Gig from './components/Gig'
 
 new Vue({
-    render: h => h('frame', [h(Home)]),
-}).$start();
+  render: h => h('frame', [h(Gig)])
+}).$start()

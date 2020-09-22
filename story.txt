@@ -10,3 +10,8 @@ Audience can either login with FB or leave their name when requesting a song
 Audience can not request more than 5 songs per gig from a single device/account? (needed?)
 Roel gets realtime notifications according to the audience actions
 Roel can later see a summary of the gigs and song request stats from admin panel
+
+
+TODO:
+- deploy on server
+- create API service for mobile app
