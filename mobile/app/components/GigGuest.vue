@@ -25,18 +25,10 @@
 </template>
 
 <script>
-import { SocketIO } from 'nativescript-socketio'
 import api from '@/services/api'
-
-const socketIO = new SocketIO('https://studiodoblo.de:3002', {})
 
 export default {
   mounted() {
-    socketIO.connect()
-    socketIO.on('new-request', (request) => {
-      const { song_id } = request
-      this.gig.songs.find(song => song.id === song_id).requests.push(request)
-    })
     this.loadGig()
   },
   data: () => ({
@@ -82,7 +74,7 @@ export default {
       if (!selectedSongs.length) return
       api.requestsSongs(this.gig.id, selectedSongs)
         .then(() => {
-          console.log('now what')
+          this.songs = this.songs.filter(song => !selectedSongs.includes(song.id))
         })
     }
   }
