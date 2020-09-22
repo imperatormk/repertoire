@@ -27,5 +27,17 @@ export default {
   stopGig(gigId) {
     return getAuthHeaders()
       .then(options => http.put(`/gigs/${gigId}`, {}, options))
+  },
+  requestsSongs(gigId, songs) {
+    const reqObj = {
+      request: {
+        gig_id: gigId,
+        songs,
+        message: 'Pls these ones'
+      },
+      type: 'requests'
+    }
+    return getAuthHeaders()
+      .then(options => http.post('/requests', reqObj, options))
   }
 }
