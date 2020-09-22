@@ -9,6 +9,7 @@ Audience can send a song suggestion if the song is not found in the list
 Audience can either login with FB or leave their name when requesting a song
 Audience can not request more than 5 songs per gig from a single device/account? (needed?)
 Roel gets realtime notifications according to the audience actions
+Roel can mark a song as played so it's removed from the list on both sides
 Roel can later see a summary of the gigs and song request stats from admin panel
 
 

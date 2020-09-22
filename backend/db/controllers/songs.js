@@ -8,14 +8,7 @@ const getAll = (opts = {}) => {
 
 const getOne = (criteria) => {
 	const options = {
-		where: criteria,
-		include: [{
-			model: Request,
-			as: 'requests'
-		}, {
-			model: Suggestion,
-			as: 'suggestions'
-		}]
+		where: criteria
 	}
 	return Song.findOne(options)
 }

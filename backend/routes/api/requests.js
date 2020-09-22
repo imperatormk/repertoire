@@ -7,17 +7,28 @@ router.post('/', async (req, res, next) => {
   request.user_id = userId
 
   try {
-    const songId = request.song_id
-    const song = db.songs.getById(song)
-    if (!song) throw { status: 400, msg: 'invalidSong' }
+    const gig = await db.gigs.getActive()
+    if (!gig) throw { status: 400, msg: 'invalidGig' }
 
-    const gig = db.gigs.getActive()
-    if (!gig || !gig.active || gig.id !== song.gig_id) throw { status: 400, msg: 'invalidGig' }
+    let requestRes = {}
+    if (type === 'requests') {
+      const songIds = request.songs || []
+      if (!songIds.length) throw { status: 400, msg: 'emptyReq' }
+  
+      const songCheckP = songIds.map(songId => db.songs.getById(songId))
+      const songs = await Promise.all(songCheckP)
+      if (songs.filter(song => !song).length) throw { status: 400, msg: 'invalidSong' }
+  
+      songs.forEach((song) => {
+        if (gig.id !== song.gig_id) throw { status: 400, msg: 'invalidSong' }
+      })
 
-    const dbCtrl = db[type]
-    if (!dbCtrl) throw { status: 400, msg: 'invalidOp' }
-
-    const requestRes = await dbCtrl.insert(request)
+      requestRes = await db.requests.insert(request)
+    } else if (type === 'suggestions') {
+      requestRes = await db.suggestions.insert(request)
+    } else {
+      throw { status: 400, msg: 'invalidOp' }
+    }
     requestRes.type = type
 
     const io = req.app.get('socketio')

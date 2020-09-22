@@ -20,22 +20,36 @@ const getActive = () => {
 		order: [[ 'createdAt', 'DESC' ]],
 		include: [{
 			model: Song,
-			as: 'songs',
-			include: [{
-				model: Request,
-				as: 'requests'
-			}, {
-				model: Suggestion,
-				as: 'suggestions'
-			}]
+			as: 'songs'
+		}, {
+			model: Request,
+			as: 'requests'
+		}, {
+			model: Suggestion,
+			as: 'suggestions'
 		}]
 	}
   return getAll(options)
     .then((gigs) => {
-      if (!gigs.length) return null
-      const gig = gigs[0]
-      if (!gig.active) return null
-      return gig.toJSON()
+			if (!gigs.length) return null
+
+      const gig = gigs[0].toJSON()
+			let { songs, active, requests } = gig
+			
+			if (!active) return null
+
+			songs = songs.map((song) => {
+				const songRequests = requests.filter(request => request.songs.includes(song.id)).map(request => ({ ...request, songs: undefined }))
+				return {
+					...song,
+					requests: songRequests
+				}
+			})
+
+			gig.songs = songs
+			delete gig.requests
+
+      return gig
     })
 }
 

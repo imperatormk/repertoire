@@ -9,6 +9,14 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'gig_id',
       as: 'songs'
     })
+    Gig.hasMany(models.request, {
+      foreignKey: 'gig_id',
+      as: 'requests'
+    })
+    Gig.hasMany(models.suggestion, {
+      foreignKey: 'gig_id',
+      as: 'suggestions'
+    })
   }
   return Gig
 }

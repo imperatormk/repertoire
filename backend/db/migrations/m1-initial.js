@@ -182,14 +182,18 @@ const requests = (Sequelize) => ({
     },
     allowNull: false
   },
-  song_id: {
+  gig_id: {
     type: Sequelize.BIGINT,
     onDelete: 'CASCADE',
     references: {
-      model: 'songs',
+      model: 'gigs',
       key: 'id',
-      as: 'song_id'
+      as: 'gig_id'
     },
+    allowNull: false
+  },
+  songs: {
+    type: Sequelize.ARRAY(Sequelize.BIGINT),
     allowNull: false
   },
   message: {
@@ -227,13 +231,13 @@ const suggestions = (Sequelize) => ({
     },
     allowNull: false
   },
-  song_id: {
+  gig_id: {
     type: Sequelize.BIGINT,
     onDelete: 'CASCADE',
     references: {
-      model: 'songs',
+      model: 'gigs',
       key: 'id',
-      as: 'song_id'
+      as: 'gig_id'
     },
     allowNull: false
   },

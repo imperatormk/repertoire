@@ -12,9 +12,9 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'user_id',
       as: 'suggester'
     })
-    Suggestion.belongsTo(models.song, {
-      foreignKey: 'song_id',
-      as: 'song'
+    Suggestion.belongsTo(models.gig, {
+      foreignKey: 'gig_id',
+      as: 'gig'
     })
   }
   return Suggestion
