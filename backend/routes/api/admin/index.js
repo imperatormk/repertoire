@@ -1,6 +1,9 @@
-const router = require('express').Router()
+const fs = require('fs')
+const path = require('path')
+const mime = require('mime')
 
-const { uploadMiddleware } = require(__basedir + '/helpers')
+const router = require('express').Router()
+const { uploadMiddleware, checkRepertoire } = require(__basedir + '/helpers')
 
 router.get('/', (req, res) => {
   res.json({ admin: true })
@@ -14,10 +17,28 @@ const uploadMwRepertoires = uploadMiddleware('repertoires').fields(
   }]
 )
 
-router.post('/repertoire', uploadMwRepertoires, (req, res) => {
-  const url = req.files['repertoire'][0].filename
+router.get('/repertoire', async (req, res) => {
+  const resObj = await checkRepertoire()
+  res.send(resObj)
+})
+
+router.post('/repertoire', uploadMwRepertoires, async (req, res) => {
+  const file = req.files['repertoire'][0]
   const data = JSON.parse(req.body.data)
-  console.log(url, data)
+
+  const renameP = () => new Promise((resolve, reject) => {
+    const ext = mime.getExtension(file.mimetype)
+    const newFilename = path.join(file.destination, `${data.type}.${ext}`)
+
+    fs.rename(file.path, newFilename, (err) => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve()
+      }
+    })
+  })
+  await renameP()
 
   res.json({ success: true })
 })

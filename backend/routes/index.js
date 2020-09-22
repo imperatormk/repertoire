@@ -1,4 +1,3 @@
-const fs = require('fs')
 const express = require('express')
 const router = express.Router()
 
@@ -18,10 +17,6 @@ router.get('/', (_, res) => {
 
 const staticFiles = ['repertoires']
 staticFiles.forEach((staticFile) => {
-  if (!fs.existsSync(staticFile)) {
-    fs.mkdirSync(staticFile)
-  }
-
   const staticPath = helpers.getStaticFilesPath(staticFile)
   const storagePath = helpers.getStoragePath(staticFile)
 

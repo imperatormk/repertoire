@@ -71,6 +71,32 @@ const tokens = (Sequelize) => ({
   }
 })
 
+const configs = (Sequelize) => ({
+  id: {
+    allowNull: false,
+    autoIncrement: true,
+    primaryKey: true,
+    type: Sequelize.BIGINT
+  },
+  key: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    unique: true
+  },
+  value: {
+    type: Sequelize.JSONB,
+    allowNull: false
+  },
+  createdAt: {
+    type: Sequelize.DATE,
+    defaultValue: Sequelize.NOW
+  },
+  updatedAt: {
+    type: Sequelize.DATE,
+    defaultValue: Sequelize.NOW
+  }
+})
+
 const gigs = (Sequelize) => ({
   id: {
     allowNull: false,
@@ -123,6 +149,10 @@ const songs = (Sequelize) => ({
   },
   attachments: {
     type: Sequelize.JSONB,
+    allowNull: false
+  },
+  type: {
+    type: Sequelize.STRING,
     allowNull: false
   },
   createdAt: {
@@ -248,9 +278,10 @@ module.exports = {
           return Promise.all([songsP])
             .then(() => {
               const tokensP = queryInterface.createTable('tokens', tokens(Sequelize))
+              const configsP = queryInterface.createTable('configs', configs(Sequelize))
               const requestsP = queryInterface.createTable('requests', requests(Sequelize))
               const suggestionsP = queryInterface.createTable('suggestions', suggestions(Sequelize))
-              return Promise.all([tokensP, requestsP, suggestionsP])
+              return Promise.all([tokensP, configsP, requestsP, suggestionsP])
             })
         })
     })
@@ -258,9 +289,10 @@ module.exports = {
   down: (queryInterface) => {
     return queryInterface.sequelize.transaction((t) => {
       const tokensP = queryInterface.dropTable('tokens')
+      const configsP = queryInterface.dropTable('configs')
       const requestsP = queryInterface.dropTable('requests')
       const suggestionsP = queryInterface.dropTable('suggestions')
-      return Promise.all([tokensP, requestsP, suggestionsP])
+      return Promise.all([tokensP, configsP, requestsP, suggestionsP])
         .then(() => {
           const songsP = queryInterface.dropTable('songs')
           return Promise.all([songsP])

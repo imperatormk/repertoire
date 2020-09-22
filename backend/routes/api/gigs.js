@@ -1,6 +1,8 @@
 const router = require('express').Router()
 const db = require(__basedir + '/db/controllers')
 
+const { readRepertoire } = require(__basedir + '/helpers')
+
 router.get('/active', async (req, res, next) => {
   try {
     const gig = await db.gigs.getActive()
@@ -14,15 +16,7 @@ router.post('/', async (req, res, next) => {
   const { gig } = req.body
   gig.active = true
 
-  const songs = [{
-    title: 'Song A',
-    artist: 'Artist A',
-    attachments: []
-  }, {
-    title: 'Song B',
-    artist: 'Artist B',
-    attachments: []
-  }]
+  const songs = await readRepertoire()
 
   try {
     const activeGig = await db.gigs.getActive()
