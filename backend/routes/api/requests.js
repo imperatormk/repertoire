@@ -11,6 +11,11 @@ router.post('/', async (req, res, next) => {
     if (!dbCtrl) throw { msg: 'invalidOp' }
 
     const requestRes = await dbCtrl.insert(request)
+    requestRes.type = type
+
+    const io = req.app.get('socketio')
+    io.emit('new-request', requestRes)
+
     res.send({ request: requestRes })
   } catch(err) {
     next(err)

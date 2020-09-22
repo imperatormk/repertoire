@@ -1,3 +1,4 @@
+Roel modifies the CSV files for repertoires from admin panel
 Roel opens app and sees no active gig
 Roel presses start gig
 App reads in the current CSV file for own+cover repertoire
@@ -6,7 +7,6 @@ Audience opens app and sees the song list for the current gig (or no gig if no g
 Audience can select up to 5 songs they'd like to hear and then press send
 Audience can send a song suggestion if the song is not found in the list
 Audience can either login with FB or leave their name when requesting a song
-Audience can not request more than 5 songs per gig from a single device/account
+Audience can not request more than 5 songs per gig from a single device/account? (needed?)
 Roel gets realtime notifications according to the audience actions
 Roel can later see a summary of the gigs and song request stats from admin panel
-Roel can modify the CSV files for repertoires from admin panel
