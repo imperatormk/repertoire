@@ -6,6 +6,10 @@ module.exports = (sequelize, DataTypes) => {
     attachments: DataTypes.JSONB
   })
   Song.associate = function(models) {
+    Song.belongsTo(models.gig, {
+      foreignKey: 'gig_id',
+      as: 'gig'
+    })
     Song.hasMany(models.request, {
       foreignKey: 'song_id',
       as: 'requests'

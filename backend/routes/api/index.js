@@ -9,7 +9,10 @@ const authRoutes = require('./auth')
 router.use('/auth', authRoutes)
 
 const adminRoutes = require('./admin')
-router.use('/admin', authMiddleware(), adminMiddleware, adminRoutes)
+router.use('/admin', authMiddleware(), adminRoutes)
+
+const gigsRoutes = require('./gigs')
+router.use('/gigs', authMiddleware(), gigsRoutes)
 
 const songsRoutes = require('./songs')
 router.use('/songs', authMiddleware(), songsRoutes)

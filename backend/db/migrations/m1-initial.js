@@ -71,12 +71,47 @@ const tokens = (Sequelize) => ({
   }
 })
 
+const gigs = (Sequelize) => ({
+  id: {
+    allowNull: false,
+    autoIncrement: true,
+    primaryKey: true,
+    type: Sequelize.BIGINT
+  },
+  title: {
+    type: Sequelize.STRING,
+    allowNull: false
+  },
+  active: {
+    type: Sequelize.BOOLEAN,
+    allowNull: false
+  },
+  createdAt: {
+    type: Sequelize.DATE,
+    defaultValue: Sequelize.NOW
+  },
+  updatedAt: {
+    type: Sequelize.DATE,
+    defaultValue: Sequelize.NOW
+  }
+})
+
 const songs = (Sequelize) => ({
   id: {
     allowNull: false,
     autoIncrement: true,
     primaryKey: true,
     type: Sequelize.BIGINT
+  },
+  gig_id: {
+    type: Sequelize.BIGINT,
+    onDelete: 'CASCADE',
+    references: {
+      model: 'gigs',
+      key: 'id',
+      as: 'gig_id'
+    },
+    allowNull: false
   },
   title: {
     type: Sequelize.STRING,
@@ -206,13 +241,17 @@ module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.sequelize.transaction((t) => {
       const usersP = queryInterface.createTable('users', users(Sequelize))
-      const songsP = queryInterface.createTable('songs', songs(Sequelize))
-      return Promise.all([usersP, songsP])
+      const gigsP = queryInterface.createTable('gigs', gigs(Sequelize))
+      return Promise.all([usersP, gigsP])
         .then(() => {
-          const tokensP = queryInterface.createTable('tokens', tokens(Sequelize))
-          const requestsP = queryInterface.createTable('requests', requests(Sequelize))
-          const suggestionsP = queryInterface.createTable('suggestions', suggestions(Sequelize))
-          return Promise.all([tokensP, requestsP, suggestionsP])
+          const songsP = queryInterface.createTable('songs', songs(Sequelize))
+          return Promise.all([songsP])
+            .then(() => {
+              const tokensP = queryInterface.createTable('tokens', tokens(Sequelize))
+              const requestsP = queryInterface.createTable('requests', requests(Sequelize))
+              const suggestionsP = queryInterface.createTable('suggestions', suggestions(Sequelize))
+              return Promise.all([tokensP, requestsP, suggestionsP])
+            })
         })
     })
   },
@@ -223,9 +262,13 @@ module.exports = {
       const suggestionsP = queryInterface.dropTable('suggestions')
       return Promise.all([tokensP, requestsP, suggestionsP])
         .then(() => {
-          const usersP = queryInterface.dropTable('users')
           const songsP = queryInterface.dropTable('songs')
-          return Promise.all([usersP, songsP])
+          return Promise.all([songsP])
+          .then(() => {
+              const usersP = queryInterface.dropTable('users')
+              const gigsP = queryInterface.dropTable('gigs')
+              return Promise.all([usersP, gigsP])
+            })
         })
     })
   }
