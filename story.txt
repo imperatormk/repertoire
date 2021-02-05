@@ -6,13 +6,17 @@ Roel sees the song list for the current gig all with 0 votes
 Audience opens app and sees the song list for the current gig (or no gig if no gig)
 Audience can select up to 5 songs they'd like to hear and then press send
 Audience can send a song suggestion if the song is not found in the list
-Audience can either login with FB or leave their name when requesting a song
+Audience can either login with FB or leave their name when requesting a song (now?)
 Audience can not request more than 5 songs per gig from a single device/account? (needed?)
 Roel gets realtime notifications according to the audience actions
 Roel can mark a song as played so it's removed from the list on both sides
 Roel can later see a summary of the gigs and song request stats from admin panel
 
-
 TODO:
+- implement admin panel
+	- file upload
+
 - deploy on server
-- create API service for mobile app
+- protect admin endpoints
+
+- create API service for mobile app (?)

@@ -1,6 +1,6 @@
 import http from './http'
 
-const STORAGE_KEY = 'caregiver_user'
+const STORAGE_KEY = 'repertoire_user'
 
 const getStoredObj = () => {
   const storedObj = localStorage.getItem(STORAGE_KEY)

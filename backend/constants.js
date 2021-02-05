@@ -1,5 +1,5 @@
 const constants = {
-  appStoragePath: 'C:\\Users\\Home\\Documents\\Projects\\STORAGE\\repertoire',
+  appStoragePath: 'D:\\Projects\\STORAGE\\repertoire',
   staticFilesPath: '/static'
 }
 

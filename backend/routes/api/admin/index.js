@@ -1,6 +1,5 @@
 const fs = require('fs')
 const path = require('path')
-const mime = require('mime')
 
 const router = require('express').Router()
 const { uploadMiddleware, checkRepertoire } = require(__basedir + '/helpers')
@@ -27,8 +26,8 @@ router.post('/repertoire', uploadMwRepertoires, async (req, res) => {
   const data = JSON.parse(req.body.data)
 
   const renameP = () => new Promise((resolve, reject) => {
-    const ext = mime.getExtension(file.mimetype)
-    const newFilename = path.join(file.destination, `${data.type}.${ext}`)
+    const ext = path.extname(file.originalname)
+    const newFilename = path.join(file.destination, `${data.type}${ext}`)
 
     fs.rename(file.path, newFilename, (err) => {
       if (err) {
